@@ -36,6 +36,15 @@ func addTestTodos(){
 	todoMap[3] = &Todo{3, "bb",true,time.Now()}
 }
 
+func addTodoHandler(w http.ResponseWriter, r *http.Request){
+	name := r.FormValue("name")
+	id := len(todoMap) + 1
+	todo := &Todo{id, name , false, time.Now()}
+	//id 넣기
+	todoMap[id] = todo
+	rd.JSON(w, http.StatusOK, todo)
+}
+
 func MakeHandler() http.Handler{
 	todoMap = make(map[int]*Todo)
 	//testdate
@@ -44,6 +53,7 @@ func MakeHandler() http.Handler{
 	r := mux.NewRouter()
 
 	r.HandleFunc("/todos", getTodoListHandler).Methods("GET")
+	r.HandleFunc("/todos", addTodoHandler).Methods("POST")
 	r.HandleFunc("/",indexHandler)
 	return r
 }
