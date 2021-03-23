@@ -21,14 +21,22 @@ $('.todo-list-add-btn').on("click", function(event) {
 });
 
 todoListItem.on('change', '.checkbox', function() {
-if ($(this).attr('checked')) {
-$(this).removeAttr('checked');
-} else {
-$(this).attr('checked', 'checked');
-}
+	var id = $(this).closest("li").attr('id');
+	var $self = $(this);
+	var compeleted = true;
+	if ($self.attr('checked')){
+		completed = false;
+	}
+	$.get("complete-todo/"+id+"?complete="+complete,function(data){
+		
+		if (complete) {
+			$self.removeAttr('checked');
+		} else {
+			$self.attr('checked', 'checked');
+		}
 
-$(this).closest("li").toggleClass('completed');
-
+		$self.closest("li").toggleClass('completed');
+	});
 });
 
 var addItem = function(item){
@@ -54,8 +62,10 @@ todoListItem.on('click', '.remove', function() {
 	$.ajax({
 		url : "todos/" + id,
 		type : "DELETE",
-		success : function(){
-			$self.parent().remove();
+		success : function(data){
+			if (data.success){
+				$self.parent().remove();
+			}
 		}
 	});
 	//$(this).parent().remove();

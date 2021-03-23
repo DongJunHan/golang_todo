@@ -54,6 +54,19 @@ func removeTodoHandler(w http.ResponseWriter, r *http.Request){
 	}
 }
 
+func completeTodoHandler(w http.ResponseWriter, r *http.Request){
+		vars := mux.Vars(r)
+		id, _ := strconv.Atoi(vars["id"])
+		complete := r.FormValue("complete") == "true"
+		if todo, ok := todoMap[id]; ok{
+			todo.Completed = complete
+			rd.JSON(w, http.StatusOK, Success{true})
+		}else{
+			rd.JSON(w, http.StatusOK, Success{false})
+		}
+
+}
+
 func addTestTodos(){
 	todoMap[1] = &Todo{1, "a",false,time.Now()}
 	todoMap[2] = &Todo{2, "bb",false,time.Now()}
@@ -70,7 +83,8 @@ func MakeHandler() http.Handler{
 
 	r.HandleFunc("/todos", getTodoListHandler).Methods("GET")
 	r.HandleFunc("/todos", addTodoHandler).Methods("POST")
-	r,HandleFunc("/todos/{id:[0-9]+}", removeTodoHandler).Methods("DELETE")
+	r.HandleFunc("/todos/{id:[0-9]+}", removeTodoHandler).Methods("DELETE")
+	r.HandleFunc("complete-todo/{id:[0-9]+}", completeTodoHandler).Methods("GET")
 	r.HandleFunc("/",indexHandler)
 	return r
 }
