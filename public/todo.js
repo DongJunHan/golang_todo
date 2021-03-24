@@ -3,6 +3,7 @@
 $(function() {
 var todoListItem = $('.todo-list');
 var todoListInput = $('.todo-list-input');
+
 $('.todo-list-add-btn').on("click", function(event) {
 	event.preventDefault();
 
@@ -10,7 +11,7 @@ $('.todo-list-add-btn').on("click", function(event) {
 
 	if (item) {
 		//서버에서 json object로 반환해주기 때문에 값을 그냥 사용가능하다
-		$.post("todos/",{name:item},additem)
+		$.post("/todos",{name:item},addItem)
 		//function(e){
 		//addItem({name : item, completed : false});
 	//});
