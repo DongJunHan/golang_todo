@@ -40,7 +40,7 @@ func addTodoHandler(w http.ResponseWriter, r *http.Request){
 }
 
 type Success struct{
-	Success bool `json :"success"`
+	Success bool `json:"success"`
 }
 func removeTodoHandler(w http.ResponseWriter, r *http.Request){
 	vars := mux.Vars(r)
@@ -81,8 +81,8 @@ func MakeHandler() http.Handler{
 	rd = render.New()
 	r := mux.NewRouter()
 
-	r.HandleFunc("/todos", getTodoListHandler).Methods("GET")
 	r.HandleFunc("/todos", addTodoHandler).Methods("POST")
+	r.HandleFunc("/todos", getTodoListHandler).Methods("GET")
 	r.HandleFunc("/todos/{id:[0-9]+}", removeTodoHandler).Methods("DELETE")
 	r.HandleFunc("complete-todo/{id:[0-9]+}", completeTodoHandler).Methods("GET")
 	r.HandleFunc("/",indexHandler)

@@ -24,13 +24,12 @@ $('.todo-list-add-btn').on("click", function(event) {
 todoListItem.on('change', '.checkbox', function() {
 	var id = $(this).closest("li").attr('id');
 	var $self = $(this);
-	var compeleted = true;
-	if ($self.attr('checked')){
+	var completed = true;
+	if ($(this).attr('checked')){
 		completed = false;
 	}
-	$.get("complete-todo/"+id+"?complete="+complete,function(data){
-		
-		if (complete) {
+	$.get("complete-todo/"+id+"?complete="+completed,function(data){	
+		if (completed == false) {
 			$self.removeAttr('checked');
 		} else {
 			$self.attr('checked', 'checked');
