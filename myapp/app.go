@@ -4,6 +4,7 @@ import(
 	"net/http"
 	"time"
 	"strconv"
+	"log"
 	"github.com/gorilla/mux"
 	"github.com/unrolled/render"
 )
@@ -33,6 +34,7 @@ func getTodoListHandler(w http.ResponseWriter, r *http.Request){
 func addTodoHandler(w http.ResponseWriter, r *http.Request){
 	name := r.FormValue("name")
 	id := len(todoMap) + 1
+	log.Printf("name is :%s , id : %d\n",name,id)
 	todo := &Todo{id, name , false, time.Now()}
 	//id 넣기
 	todoMap[id] = todo
@@ -43,9 +45,14 @@ type Success struct{
 	Success bool `json:"success"`
 }
 func removeTodoHandler(w http.ResponseWriter, r *http.Request){
+	log.Println("removeTodoHandler in")
 	vars := mux.Vars(r)
 	id, _ := strconv.Atoi(vars["id"])
-
+	if vars["id"] != "" {
+		log.Printf("delete id : %d\n",id)
+	}else{
+		log.Printf("del There is no id\n")
+	}
 	if _, ok := todoMap[id]; ok {
 		delete(todoMap,id)
 		rd.JSON(w, http.StatusOK,Success{true})
@@ -55,8 +62,14 @@ func removeTodoHandler(w http.ResponseWriter, r *http.Request){
 }
 
 func completeTodoHandler(w http.ResponseWriter, r *http.Request){
+		log.Println("complete bool Handler in")
 		vars := mux.Vars(r)
 		id, _ := strconv.Atoi(vars["id"])
+		if vars["id"] != "" {
+			log.Printf("complete or nonComplete id : %d\n",id)
+		}else{
+			log.Printf("There is no id\n")
+		}
 		complete := r.FormValue("complete") == "true"
 		if todo, ok := todoMap[id]; ok{
 			todo.Completed = complete
